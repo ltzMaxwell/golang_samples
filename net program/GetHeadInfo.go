@@ -16,9 +16,14 @@ func main() {
 	}
 	service := os.Args[1]
 
-	tcpAddr, err := net.ResolveTCPAddr("tcp4", service)
-	checkError(err)
+	fmt.Println("service is :", service)
 
+	tcpAddr, err := net.ResolveTCPAddr("tcp4", service)
+
+	fmt.Println("tcpAddr is :", tcpAddr)
+
+	checkError(err)
+	//use DialTCP
 	conn, err := net.DialTCP("tcp", nil, tcpAddr)
 	checkError(err)
 
