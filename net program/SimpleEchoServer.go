@@ -1,4 +1,4 @@
-/* DaytimeServer
+/* SimpleEchoServer
  */
 package main
 
@@ -6,12 +6,11 @@ import (
 	"fmt"
 	"net"
 	"os"
-	"time"
 )
 
 func main() {
 
-	service := ":1200"
+	service := ":1201"
 	tcpAddr, err := net.ResolveTCPAddr("tcp4", service)
 	checkError(err)
 
@@ -20,13 +19,28 @@ func main() {
 
 	for {
 		conn, err := listener.Accept()
+		fmt.Println("connected to server")
 		if err != nil {
 			continue
 		}
+		handleClient(conn)
+		conn.Close() // we're finished
+		fmt.Println("conn closed")
+	}
+}
 
-		daytime := time.Now().String()
-		conn.Write([]byte(daytime)) // don't care about return value
-		conn.Close()                // we're finished with this client
+func handleClient(conn net.Conn) {
+	var buf [512]byte
+	for {
+		n, err := conn.Read(buf[0:])
+		if err != nil {
+			return
+		}
+		fmt.Println(string(buf[0:]))
+		_, err2 := conn.Write(buf[0:n])
+		if err2 != nil {
+			return
+		}
 	}
 }
 
