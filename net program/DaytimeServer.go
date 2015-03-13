@@ -1,4 +1,4 @@
-/* DaytimeServer
+/* DaytimeServer TCP
  */
 package main
 
@@ -12,13 +12,24 @@ import (
 func main() {
 
 	service := ":1200"
+	/**
+	 * resolve address
+	 * @type {[type]}
+	 */
 	tcpAddr, err := net.ResolveTCPAddr("tcp4", service)
 	checkError(err)
-
+	/**
+	 * get listner
+	 * @type {[type]}
+	 */
 	listener, err := net.ListenTCP("tcp", tcpAddr)
 	checkError(err)
 
 	for {
+		/**
+		 * get connection from listener
+		 * @type {[type]}
+		 */
 		conn, err := listener.Accept()
 		fmt.Println("connectd to server")
 		if err != nil {
